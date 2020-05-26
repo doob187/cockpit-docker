@@ -11,11 +11,20 @@ RUN apt-get update \
         sqlite3 libsqlite3-dev \
         libssl-dev \
         libzip-dev \
+        dirmngr \
+        echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/backports.list \
+        apt-get update -y \
+	apt-get install -y cockpit-machines \
     && pecl install mongodb \
     && pecl install redis \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) iconv gd pdo zip opcache pdo_sqlite \
     && a2enmod rewrite expires
+
+#RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > \
+#        /etc/apt/sources.list.d/backports.list \
+#        apt-get update -y \
+#	apt-get install -y cockpit-machines 
 
 RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongodb.ini
 RUN echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
